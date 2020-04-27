@@ -36,5 +36,47 @@ function listApiFetch(...args) {
       }
       return data;
     });
+
 }
+
+//gets all bookmarks, and CRUD functions
+function getBookmarks() {
+  return listApiFetch(`${baseURL}`);
+}
+
+function createBookmark(myBookData) {
+  return listApiFetch(`${baseURL}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: myBookData
+  });
+}
+
+function deleteBookmark(bookId) {
+  return listApiFetch(`${baseURL}/${bookId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+}
+
+function updateBookmark(bookId, newBookData) {
+  return listApiFetch(`${baseURL}/${bookId}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: newBookData
+  });
+}
+
+export default {
+  getBookmarks,
+  createBookmark,
+  deleteBookmark,
+  updateBookmark
+};
 
