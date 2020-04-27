@@ -2,81 +2,183 @@
   box-sizing: border-box;
 }
 
-body {
-  display: flex;
-  flex-direction: column;
+body{
+  background:rgba(29, 35, 41, 0.945);
   padding: 16px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
- .js-buttons{
-  text-align: center;
-  align-content: center;
-  font-size: 18px;
+.title-container {
+  display: flex;
+  justify-content: center;
+  background: rgba(111, 142, 189, 0.925);
+  border: solid black .2em;
+  width: 100%;
+  max-width: 750px;
+  padding: 1rem;
+  margin: 2em auto 1.2em auto;
 }
 
-input{
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+/*=============== Button styles ================= */
+
+button {
+  flex-basis: 1;
   font-weight: lighter;
   padding: 10px 24px;
   border-radius: 5%;
   opacity: 95%;
   color: black;
 }
-
-#title {
-  text-align: center;
-  width: 700px;
-  padding: 1rem;
-  border: solid black .2em;
-  background: rgba(8, 62, 143, 0.5);
-  margin-top: auto;
+option {
+ background:  rgba(111, 142, 189, 0.925);
+ opacity: 95%;
+ font-weight: lighter;
+ color: black;
 }
 
-header {
-  display:flex;
-  width: 100%;
+.filter-select {
+  background:rgba(231, 231, 231, 0.911);
+}
+
+.new-bookmark-button {
+  background: rgba(231, 231, 231, 0.911);
+}
+
+select {
+  font-weight: lighter;
+  width: 175px;
+  border-radius: 5%;
   opacity: 95%;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
+  color: black;
 }
 
-section {
-  display: flex;
-  justify-content: center;
-}
 
-.section-buttons {
- padding-top: 4em;
-}
+/*========= Add Bookmark form styles ===============*/
 
-form {
+#new-bookmark-form {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: bold;
   padding: 10px 24px;
   border-radius: 5%;
   opacity: 95%;
   color: black;
-  width: 420px;
-  height: 200px;
+  width: 400px;
+  height: fit-content;
+  margin: auto;
 }
 
-button {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-weight: lighter;
+.rating-select {
+  width: 353px;
+  margin: auto;
+  height: 2.3em;
+}
+
+#new-bookmark-input,#new-bookmark-title {
+  height: 2.3em;
+}
+
+#new-bookmark-description {
+  height: 2.3em;
+  width: 353px;
+}
+
+/*================ Saved Bookmarks styles ===============  */
+
+.bookmark-data {
+  list-style-type: none;
+  color:rgba(0, 0, 0, 0.925);
+  text-align: center;
+  border: solid;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: rgba(111, 142, 189, 0.925);
+  width: 100%;
+  max-width: 750px;
+  margin: .6em auto 1em;
+  padding: 1.2em;
+}
+
+.bookmark-data a {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  margin: auto;
+}
+
+input[type=checkbox] {
+	-webkit-appearance: none;
+	background-color: #fafafade;
+	border: .2em solid #131616e5;
+	padding: .4em;
+  display: inline-block;
+  margin-top: .3em;
+}
+
+input[type=checkbox]:checked {
+  background-color: rgba(209, 211, 82, 0.938);
+}
+
+/* ========== Edit Bookmark Form Styles ========== */
+
+.edit-bookmark-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-weight: bold;
   padding: 10px 24px;
   border-radius: 5%;
   opacity: 95%;
   color: black;
+  width: 400px;
+  height: fit-content;
+  margin: auto;
 }
 
 
+/*================= Other Styles ==============  */
 
-/* anything footer related */
+
+.error-container {
+  color: red;
+  background: white;
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+}
+
+.title-button-container{
+display: flex;
+flex-direction: row;
+justify-content: space-evenly;
+}
+
+:link {
+  color: rgb(255, 255, 255);
+}
+
+:visited {
+  color: rgba(136, 12, 119, 0.918);
+}
+
+a:hover {
+  text-decoration: line-through;
+  color: rgba(12, 13, 14, 0.932);
+}
+
+#delete-bookmark {
+    margin: auto;
+}
+
+#edit-bookmark {
+  margin: auto;
+}
+
+
+/* ======= Footer styles  ============ */
 
 .footer {
   opacity: 95%;
@@ -95,5 +197,5 @@ button {
 
 .footer a:hover {
   text-decoration: line-through;
-  color: rgb(32, 176, 212);
+  color: rgb(21, 79, 133);
 }

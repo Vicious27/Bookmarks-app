@@ -1,22 +1,19 @@
-/*  global $ */
-
-import store from './store';
-import api from './api';
-import bookmarks from './bookmarks';
+/* global $ */
+import api from './api.js';
+import bookmark from './bookmarks.js';
+import store from './store.js';
 
 function main() {
-  $(() => {
-    $('body').before(`<div>${new Date()}</div>`);
-  });
+
 
   api.getBookmarks()
-    .then((books) => {
-      books.forEach((book) => store.addBook(book));
-      bookmarks.render();
-      bookmarks.renderError();
+    .then((items) => {
+      items.forEach((item) => store.addItem(item));
+      bookmark.render();
+      bookmark.renderError();
     });
-  bookmarks.render();
-  bookmarks.renderError();
+  bookmark.render();
+  bookmark.renderError();
 }
 
-$(main);
+$(main); 

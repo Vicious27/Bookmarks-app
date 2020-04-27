@@ -1,45 +1,46 @@
 /* eslint-disable quotes */
 /* global $ */
-import store from './store';
-import api from './api';
+
+import store from './store.js';
+import api from './api.js';
+
+/******** RENDER FUNCTIONS ********/
 
 
-//render and renderError functions, along with conditionals for all states
-
-function render(bookId, expandedView) {
+function render(id, expand) {
   renderError();
 
-  if (store.addingBook) {
+  if (store.adding) {
     $('main').html(generateAddBookmarkView());
-    let view = 'addingBook';
+    let view = 'adding';
     generateCodeBlock(view);
   }
 
-  else if (store.filterBook !== 0 && !bookId) {
-    let html = [generateInitialView(), generateFilteredResults(store.filterBook)].join('');
+  else if (store.filter !== 0 && !id) {
+    let html = [generateInitialView(), generateFilteredResults(store.filter)].join('');
     $('main').html(html);
-    let view = 'filterBook';
+    let view = 'filter';
     generateCodeBlock(view);
   }
 
-  else if (store.editBook) {
-    let html = generateEditView(bookId);
+  else if (store.editing) {
+    let html = generateEditView(id);
     $('main').html(html);
-    let view = 'editBook';
+    let view = 'editing';
     generateCodeBlock(view);
   }
 
-  else if (expandedView !== undefined) {
-    let html = generateExpandedView(bookId, expandedView);
-    $(expandedView).html(html);
-    let view = 'expandedView';
+  else if (expand !== undefined) {
+    let html = generateExpandedView(id, expand);
+    $(expand).html(html);
+    let view = 'expanded';
     generateCodeBlock(view);
   }
 
   else {
-    let html = [generateInitialView(), generateBook()].join('');
+    let html = [generateInitialView(), generateItem()].join('');
     $('main').html(html);
-    let view = 'initialView';
+    let view = 'initial';
     generateCodeBlock(view);
   }
 }
@@ -56,20 +57,22 @@ function renderError() {
 }
 
 
-//========== GENERATION TEMPLATE FUNCTIONS==========//  
+//=========== GENERATION TEMPLATE FUNTIONS ============//
 
 function generateAddBookmarkView() {
+
   return `<div class="error-container"></div>
     <div class="title-container">
       <h1>My Bookmarks</h1>
     </div>
     <div class="url-and-title">
     <form id="new-bookmark-form" action="#">
-      <label for="name">Bookmark URL</label>
-        <input type="url" id="new-bookmark-input" class="new-bookmark" name="url" placeholder="Add website url" required>
-      <label for="name">Bookmark name</label>
+      <label for="name"></label>
+        <input type="url" id="new-bookmark-input" class="new-bookmark" name="url" placeholder="URL" 
+        required>
+      <label for="name"></label>
         <input type="text" id="new-bookmark-title" class="new-bookmark" name="title" placeholder="Site Name" required>
-        <select id="rating" name="site-rating">
+        <select name="rating" class="rating-select">
         <option value="1">⭐+</option>
         <option value="2">⭐⭐+</option>
         <option value="3">⭐⭐⭐+</option>
@@ -77,217 +80,212 @@ function generateAddBookmarkView() {
         <option value="5">⭐⭐⭐⭐⭐</option>
     </div>
         </select>
-      <div class="rescription-container">
-        <input type="text" id="new-bookmark-description" class="new-bookmark" name="description" placeholder="Describe website!">
-      </div>
-        <button id="cancel-new-bookmark" type="reset">Cancel</button>
-        <button type="submit" id="add-new-bookmark">Add</button>
+      <div class="description-container">
+        <input type="textfield" id="new-bookmark-description" class="new-bookmark" name="desc" placeholder="Brief website description (optional)">
+      </div>  
+        <button type="submit" id="add-new-bookmark">Add Book</button>
+      <button id="cancel-new-bookmark" type="reset">Cancel</button>
       </form>`;
 }
 
-
-function generateBook(bookId) {
-  const htmlArray = [];
-  let bookArray = store.bookmarks;
-  for (let i = 0; bookArray.length; i++) {
-    htmlArray.push(`<li class="bookmark-data" data-bookId="${bookArray[i].bookId}"> 
-    ${bookArray.title}
-    <span class="star-rating">
-    <form id="${bookArray[i].bookId}">
-    ${generateBookRatings(bookArray[i].bookId)}
-    </form><button id="delete-bookmark"></button>
-    </span>
-    </li>`);
+function generateItem() {
+  const htmlArr = [];
+  let itemArr = store.bookmarks;
+  for (let i = 0; i < itemArr.length; i++) {
+    htmlArr.push(`<li class="bookmark-data"  data-item-id="${itemArr[i].id}">
+      ${itemArr[i].title} 
+      <span class="star-rating">
+      <form id="${itemArr[i].id}">
+      ${generateRatings(itemArr[i].id)}
+      </form><button id="delete-bookmark">Delete</button></span>
+      </li>`);
   }
-  return htmlArray.join(' ');
+  return htmlArr.join(' ');
 }
 
-
-function generateFilteredResults(filterBook) {
-  const htmlArray = [];
-  let itemArray = store.ratingBookFilter(filterBook);
-  for (let i = 0; i < itemArray.length; i++) {
-    htmlArray.push(`<li class="bookmark-data"  data-item-id="${itemArray[i].bookId}">
-    ${itemArray[i].title}
-    <span class="star-rating"><form id="${itemArray[i].bookId}">
-    ${generateBookRatings(itemArray[i].bookId)}
-    </form><button id="delete-bookmark"></button>
-    </span>
+function generateFilteredResults(filter) {
+  const htmlArr = [];
+  let itemArr = store.ratingFilter(filter);
+  for (let i = 0; i < itemArr.length; i++) {
+    htmlArr.push(`<li class="bookmark-data"  data-item-id="${itemArr[i].id}">
+      ${itemArr[i].title} 
+      <span class="star-rating"><form id="${itemArr[i].id}">
+      ${generateRatings(itemArr[i].id)}
+    </form><button id="delete-bookmark">Delete</button></span>
     </li>`);
   }
-  return htmlArray.join(' ');
+  return htmlArr.join('');
 }
 
+function generateExpandedView(id, expand) {
+  let item = store.findById(id);
 
-function generateExpandedView(bookId, expandedView) {
-  let book = store.findById(bookId);
-
-  if (book.expandedView === true) {
-    store.collapseView(bookId);
-    $(expandedView).find('.expanded-bookmark-data').remove();
-    return `${book.title} 
-    <span class="star-rating"><form id="${book.id}">
-    ${generateBookRatings(bookId)}
-    </form><button id="delete-bookmark"></button>
-    </span>`;
+  if (item.expanded === true) {
+    store.collapse(id);
+    $(expand).find('.expanded-bookmark-data').remove();
+    return `${item.title} 
+      <span class="star-rating"><form id="${item.id}">
+      ${generateRatings(id)}
+      </form><button id="delete-bookmark">Delete</button></span>`;
   }
+
   else {
-    store.expandedView(bookId);
+    store.expand(id);
 
-    return `<li class="expanded-bookmark-data"  data-item-id="${book.id}">
-      ${book.title}   
-      <span class="star-rating"><form id="${book.id}">
-      ${generateBookRatings(bookId)}
+    return `<li class="expanded-bookmark-data"  data-item-id="${item.id}">
+      ${item.title}   
+      <span class="star-rating"><form id="${item.id}">
+      ${generateRatings(id)}
       </form></span>  
       <div class="description-container">
-        Description: ${book.description} 
-        URL: <a class="link" href ="${book.url}">Checkout this site</a></div>
-      <button id="delete-bookmark"></button> 
-      <button id="edit-bookmark"></button>
+        ${item.desc}
+      <a class="link" href ="${item.url}">Visit Website</a></div>
+      <button id="delete-bookmark">Delete</button> <button id="edit-bookmark">Edit</button>
       </li>`;
   }
 }
 
-
-function generateBookRatings(bookId) {
-  let array = [];
-  let book = store.findById(bookId);
-  let rating = [book.rating];
+function generateRatings(id) {
+  let arr = [];
+  let item = store.findById(id);
+  let rating = [item.rating];
 
   for (let i = 0; i < 5; i++) {
-    array.push(`<input type="checkbox" name="rating" value="${i}"
+    arr.push(`<input type="checkbox" name="rating" value="${i}"
     ${rating > i ? 'checked' : ''}></input>`);
   }
-  return array.join(' ');
+
+  return arr.join(' ');
 }
 
-function generateEditView(bookId) {
-  let book = store.findById(bookId);
+function generateEditView(id) {
+  let item = store.findById(id);
   return `
-  <div class="error-container"></div>
-    <div class="title-container">
-      <h1>My Bookmarks</h1>
+  <div class="error-container"></div><div class="title-container">
+    <h1>Bookmarks App</h1>
   </div>
   <div class="url-and-title">
-  <form class="edit-bookmark-form" data-book-id="${book.id}" action="#">
-      <label for="name">Bookmark URL</label>
-      <input type="url" id="new-bookmark-input" class="edit-bookmark" name="url" value="${book.url}" 
-      required>
-      <label for="name">Bookmark name</label>
-      <input type="text" id="new-bookmark-title" class="edit-bookmark" name="title" value="${book.title}" required>
+    <form class="edit-bookmark-form" data-item-id="${item.id}" action="#">
+      <label for="name"></label>
+        <input type="url" id="new-bookmark-input" class="edit-bookmark" name="url" value="${item.url}" 
+        required>
+      <label for="name"></label>
+        <input type="text" id="new-bookmark-title" class="edit-bookmark" name="title" value="${item.title}" required>
       <select name="rating" class="rating-select">
-        <input type="text" id="new-bookmark-title" class="new-bookmark" name="title" placeholder="Site Name" required>
-        <select id="rating" name="site-rating">
         <option value="1">⭐+</option>
         <option value="2">⭐⭐+</option>
         <option value="3">⭐⭐⭐+</option>
         <option value="4">⭐⭐⭐⭐+</option>
         <option value="5">⭐⭐⭐⭐⭐</option>
-    </div>
-        </select>
-      <div class="rescription-container">
-        <input type="text" id="new-bookmark-description" class="new-bookmark" name="description" placeholder="Describe website!">
-      </div>
-        <button id="cancel-edit" type="reset">Cancel</button>
-        <button type="submit" id="add-new-bookmark">Submit</button>
-      </form>`;
+  </div>
+      </select>
+      <div class="description-container">
+        <input type="textfield" id="new-bookmark-description" class="new-bookmark" name="desc" placeholder="Brief website description (optional)" required>
+      </div>  
+      <button type="submit" id="edit-bookmark-submit">Make Changess</button>
+      <button id="cancel-edit" type="reset">Cancel</button>
+    </form>`;
 }
 
 function generateCodeBlock(view) {
+
   if (view === 'initial') {
-    $('code').html(`'initial store state'
+    $('code').html(`inital store state
     let bookmarks = [];
-    let addingBook = false;
+    let adding = false;
     let error = {};
-    let filterBook = 0;
-    let editBook = false;
-    `);
+    let filter = 0;
+    let editing = false;`);
   }
 
-  if (view === 'expandedView') {
-    $('code').html(`'expanded view store state' 
-    const bookmarks = [
-      {
-        id: 'x56w',
-        title: 'Title 1'
-        rating: 3,
-        url: 'http://www.title.com',
-        description: 'lorem ipsum dolor sit et kbar',
-        expanded: true
-      }
-    ];
-    let addingBook = flase;
-    let error = null;
-    let filterBook = 0;
-    let editBook = false;
-    `);
+  if (view === 'expanded') {
+    $('code').html(`'expanded view store state'
+      const bookmarks = [
+        {
+          id: 'x56w',
+          title: 'Title 1',
+          rating: 3,
+          url: 'http://www.title1.com',
+          description: 'lorem ipsum dolor sit',
+          expanded: true
+        }
+      ];
+      let adding = false;
+      let error = null;
+      let filter = 0;
+      let editing = false;`);
   }
 
-  if (view === 'editBook') {
-    $('code').html(`'edit bookmark view store state' 
-    const bookmarks = [. . .];
-    let addingBook = false;
-    let error = null;
-    let filterBook = 0;
-    let editBook = true;
-    `);
+  if (view === 'adding') {
+    $('code').html(`'add bookmark view store state'
+      const bookmarks = [. . .];
+      let adding = true;
+      let error = null;
+      let filter = 0;
+      let editing = false;`);
   }
 
-  if (view === 'filterBook') {
-    $('code').html(`'filter bookmark view store state' 
-    const bookmarks = [. . .];
-    let addingBook = false;
-    let error = null;
-    let filterBook = ${store.filterBook};
-    let editBook = false;
-    `);
+  if (view === 'editing') {
+    $('code').html(`'edit bookmark view store state'
+      const bookmarks = [. . .];
+      let adding = false;
+      let error = null;
+      let filter = 0;
+      let editing = true;`);
+  }
+
+  if (view === 'filter') {
+    $('code').html(`'filter bookmark view store state'
+      const bookmarks = [. . .];
+      let adding = false;
+      let error = null;
+      let filter = ${store.filter};
+      let editing = false;`);
   }
 
   if (view === 'error') {
     $('code').html(`'edit bookmark view store state'
-    const bookmarks = [. . .];
-    let addingBook = false;
-    let error = ${store.error.message};
-    let filterBook = 0;
-    let editBook = false;
-    `);
+      const bookmarks = [. . .];
+      let adding = false;
+      let error = ${store.error.message};
+      let filter = 0;
+      let editing = false;`);
   }
 }
 
 function generateInitialView() {
+
   return `
-  <div class='error-container></div>
+  <div class="error-container"></div>
   <div class="title-container">
     <h1>My Bookmarks</h1>
+  </div>
       <div class="title-button-container">
         <button class="new-bookmark-button" id="new-bookmark">New Bookmark 📘</button>
-        <select name="Filtered By 🚩" class="filter-select">
-        <option value="0">Minimum Rating</option>
+        <select name="filter-bookmark" class="filter-select">
+        <option value="0">Filtered By 🚩</option>
         <option value="1">⭐+</option>
         <option value="2">⭐⭐+</option>
         <option value="3">⭐⭐⭐+</option>
         <option value="4">⭐⭐⭐⭐+</option>
         <option value="5">⭐⭐⭐⭐⭐</option>
-        </select>
-      </div>
-    </div>`;
+      </select>
+  </div>`;
 }
 
 
-
-
-//================== EVENT LISTENERS ====================//
+//========== Event Handlers ==============//
 
 function handleNewBookmark() {
   $('main').on('click', '#new-bookmark', event => {
-    store.addingBook = true;
+    store.adding = true;
     render();
   });
 }
 
 function handleFilterSelect() {
   $('main').on('change', '.filter-select', event => {
-    store.filterBook = $('.filter-select').val();
+    store.filter = $('.filter-select').val();
     render();
   });
 }
@@ -307,11 +305,20 @@ function handleCreateBook() {
     const myFormData = serializeJson(formElement);
 
     api.createBookmark(myFormData)
-      .then((newBook) => {
-        store.addBook(newBook);
+      .then((newItem) => {
+        store.addItem(newItem);
         render();
       });
-    store.addingBook = false;
+    store.adding = false;
+  });
+}
+
+
+function handleCancelCreate() {
+  $('main').on('click', '#cancel-new-bookmark', event => {
+    event.preventDefault();
+    store.adding = false;
+    render();
   });
 }
 
@@ -319,20 +326,23 @@ function handleDeleteBook() {
   $('main').on('click', '#delete-bookmark', event => {
     event.preventDefault();
 
-    const bookId = getBookId(event.currentTarget);
-    api.deleteBookmark(bookId)
+    const id = getBookId(event.currentTarget);
+    api.deleteBookmark(id)
       .then(() => {
-        store.findAndDelete(bookId);
+        store.findAndDelete(id);
         render();
       });
   });
 }
 
-function handleCancelCreate() {
-  $('main').on('click', '#cancel-new-bookmark', event => {
+function handleEditButton() {
+  $('main').on('click', '#edit-bookmark', event => {
     event.preventDefault();
-    store.addingBook = false;
-    render();
+
+    const id = getBookId(event.currentTarget);
+    store.editing = true;
+    store.collapse(id);
+    render(id);
   });
 }
 
@@ -340,7 +350,7 @@ function handleCancelEdit() {
   $('main').on('click', '#cancel-edit', event => {
     event.preventDefault();
 
-    store.editBook = false;
+    store.editing = false;
     render();
   });
 }
@@ -358,49 +368,48 @@ function handleSubmitEdit() {
   $('main').on('submit', '.edit-bookmark-form', event => {
     event.preventDefault();
 
-    const bookId = $(event.currentTarget).data('book-id');
+    const id = $(event.currentTarget).data('item-id');
     let formElement = document.querySelector(".edit-bookmark-form");
     const newFormData = serializeJson(formElement);
 
-    api.updateBookmark(bookId, newFormData)
+    api.updateBookmark(id, newFormData)
       .then(() => {
-        store.findAndUpdateBook(bookId, newFormData);
+        store.findAndUpdate(id, newFormData);
         render();
       });
-    store.editBook = false;
+    store.editing = false;
   });
 }
 
-function handleExpandedView() {
+function handleExpandView() {
   $('main').on('click', '.bookmark-data', event => {
     event.preventDefault();
 
-    const bookId = getBookId(event.currentTarget);
-    let book = event.currentTarget;
-    render(bookId, book);
+    const id = getBookId(event.currentTarget);
+    let item = event.currentTarget;
+    render(id, item);
   });
 }
 
-function getBookId(book) {
-  return $(book)
+function getBookId(item) {
+  return $(item)
     .closest('.bookmark-data')
-    .data('book-id');
+    .data('item-id');
 }
 
 
-
-//=============== BIND ALL EVENT LISTENERS=============//
-
 function bindEventListeners() {
-  handleNewBookmark();
-  handleFilterSelect();
-  handleCreateBook();
-  handleDeleteBook();
   handleCancelCreate();
-  handleClickLink();
-  handleSubmitEdit();
+  handleCreateBook();
+  handleNewBookmark();
+  handleDeleteBook();
+  handleFilterSelect();
+  handleExpandView();
+  handleEditButton();
   handleCancelEdit();
-  handleExpandedView();
+  handleSubmitEdit();
+  handleClickLink();
+  render();
 }
 
 $(bindEventListeners);

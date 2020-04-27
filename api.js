@@ -1,5 +1,5 @@
-import store from './store';
-import bookmarks from './bookmarks';
+import store from './store.js';
+import bookmarks from './bookmarks.js';
 
 const baseURL = 'https://thinkful-list-api.herokuapp.com/raul/bookmarks';
 
@@ -39,7 +39,7 @@ function listApiFetch(...args) {
 
 }
 
-//gets all bookmarks, and CRUD functions
+//get all bookmarks, and CRUD functions
 function getBookmarks() {
   return listApiFetch(`${baseURL}`);
 }

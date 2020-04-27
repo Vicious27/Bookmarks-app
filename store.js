@@ -1,67 +1,64 @@
 
-const bookmarks = [];
-let addingBook = false;
-let filterBook = 0;
+let bookmarks = [];
+let adding = false;
 let error = {};
-let editBook = false;
+let filter = 0;
+let editing = false;
 
-// filter books
-function ratingBookFilter(rating) {
-  let filteredBooks = this.bookmarks.filter(book => book.rating >= rating);
 
-  return filteredBooks;
+function ratingFilter(filter) {
+  let filteredItems = this.bookmarks.filter(item => item.rating >= filter);
+  return filteredItems;
 }
 
-// collapse and expanded views
-function expandedView(bookId) {
-  return this.bookmarks.find(book => book.bookId === bookId).expandedView = true;
+function expand(id) {
+  return this.bookmarks.find(item => item.id === id).expanded = true;
 }
 
-function collapseView(bookId) {
-  return this.bookmarks.find(book => book.bookId === bookId).expandedView = false;
-}
-// 
-function findById(bookId) {
-  return this.bookmarks.find(currentBook => currentBook.bookId === bookId);
+function collapse(id) {
+  return this.bookmarks.find(item => item.id === id).expanded = false;
 }
 
-function findAndDelete(bookId) {
-  return this.bookmarks = this.bookmarks.filter(currentBook => currentBook.bookId !== bookId);
+function findById(id) {
+  return this.bookmarks.find(currentItem => currentItem.id === id);
 }
 
-function findAndUpdateBook(bookId, newFormData) {
-  const currentBook = this.findById(bookId);
+function findAndDelete(id) {
+  return this.bookmarks = this.bookmarks.filter(currentItem => currentItem.id !== id);
+}
+
+function findAndUpdate(id, newFormData) {
+  const currentItem = this.findById(id);
   let obj = JSON.parse(newFormData);
-  Object.assign(currentBook, obj);
+  Object.assign(currentItem, obj);
 }
 
-function addBook(newBook) {
-  !newBook.expanded;
-  !newBook.editing;
-  this.bookmarks.push(newBook);
+function addItem(newItem) {
+  !newItem.expanded;
+  !newItem.editing;
+  this.bookmarks.push(newItem);
 }
 
 function setError(error) {
   this.error = error;
 }
 
-
-
 export default {
   bookmarks,
-  editBook,
-  addingBook,
-  filterBook,
+  adding,
+  editing,
   error,
-  ratingBookFilter,
-  expandedView,
-  collapseView,
+  filter,
   findById,
   findAndDelete,
-  addBook,
-  findAndUpdateBook,
-  setError
+  findAndUpdate,
+  addItem,
+  setError,
+  expand,
+  collapse,
+  ratingFilter
 };
+
 
 
 
