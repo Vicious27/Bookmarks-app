@@ -1,31 +1,40 @@
+import store from './store';
+import bookmark from './bookmarks';
 
+const baseURL = 'https://thinkful-list-api.herokuapp.com/raul/bookmarks';
 
-const BASE_URL = 'https://thinkful-list-api.herokuapp.com/raul';
+// fetches the api and provides errors based on response
+function listApiFetch(...args) {
+  let error;
 
-function getBooks() {
-  return fetch(`${BASE_URL}/bookmarks`);
+  return fetch(...args)
+
+    .then((response) => {
+      if (!response.ok) {
+        error = { code: response.status };
+        store.setError(error);
+        bookmark.renderError();
+
+        if (!response.headers.get('content-type').includes('json')) {
+          error.message = response.statusText;
+          store.setError(error);
+          bookmark.renderError();
+
+          return Promise.reject(error);
+        }
+      }
+      return response.json();
+    })
+
+    .then((data) => {
+      if (error) {
+        error.message = data.message;
+        store.setError(error);
+        bookmark.renderError();
+
+        return Promise.reject(error);
+      }
+      return data;
+    });
 }
 
-function createBook(title, url) {
-  let newBook = JSON.stringify({ title: title, url: url });
-  return fetch(`${BASE_URL}/bookmarks`, {
-    method: 'POST',
-    headers: { 'Content-type': 'application/json' },
-    body: newBook
-  });
-}
-
-const deleteBook = function (id) {
-  return fetch(`${BASE_URL}/bookmarks/${id}`, {
-    method: 'DELETE'
-  });
-};
-
-
-
-
-export default {
-  getBooks,
-  createBook,
-  deleteBook
-};
