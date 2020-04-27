@@ -1,5 +1,5 @@
 import store from './store';
-import bookmark from './bookmarks';
+import bookmarks from './bookmarks';
 
 const baseURL = 'https://thinkful-list-api.herokuapp.com/raul/bookmarks';
 
@@ -13,12 +13,12 @@ function listApiFetch(...args) {
       if (!response.ok) {
         error = { code: response.status };
         store.setError(error);
-        bookmark.renderError();
+        bookmarks.renderError();
 
         if (!response.headers.get('content-type').includes('json')) {
           error.message = response.statusText;
           store.setError(error);
-          bookmark.renderError();
+          bookmarks.renderError();
 
           return Promise.reject(error);
         }
@@ -30,7 +30,7 @@ function listApiFetch(...args) {
       if (error) {
         error.message = data.message;
         store.setError(error);
-        bookmark.renderError();
+        bookmarks.renderError();
 
         return Promise.reject(error);
       }
