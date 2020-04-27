@@ -1,37 +1,67 @@
 
 
-const books = [];
+const bookmarks = [];
 let addingBook = false;
-let filter = 0;
-let error = null;
+let filterBook = 0;
+let error = {};
+let editBook = false;
 
-const findById = function (id) {
-  return this.books.find(currentBook => currentBook.id === id);
-};
+// filter books
+function ratingBookFilter(rating) {
+  let filteredBooks = this.bookmarks.filter(book => book.rating >= rating);
 
-const addBook = function (book) {
-  this.books.push(book);
-};
+  return filteredBooks;
+}
 
-const findAndDelete = function (id) {
-  this.books = this.books.filter(currentBook => currentBook.id !== id);
-};
+// collapse and expanded views
+function expandedView(bookId) {
+  return this.bookmarks.find(book => book.bookId === bookId).expandedView = true;
+}
+
+function collapseView(bookId) {
+  return this.bookmarks.find(book => book.bookId === bookId).expandedView = false;
+}
+// 
+function findById(bookId) {
+  return this.bookmarks.find(currentBook => currentBook.bookId === bookId);
+}
+
+function findAndDelete(bookId) {
+  return this.bookmarks = this.bookmarks.filter(currentBook => currentBook.bookId !== bookId);
+}
+
+function findAndUpdateBook(bookId, newFormData) {
+  const currentBook = this.findById(bookId);
+  let obj = JSON.parse(newFormData);
+  Object.assign(currentBook, obj);
+}
+
+function addBook(newBook) {
+  !newBook.expanded;
+  !newBook.editing;
+  this.bookmarks.push(newBook);
+}
+
+function setError(error) {
+  this.error = error;
+}
 
 
-const findAndUpdate = function (id, newData) {
-  let book = this.findByid(id);
-  Object.assign(book, newData);
-};
 
 export default {
-  books,
-  filter,
-  error,
+  bookmarks,
+  editBook,
   addingBook,
+  filterBook,
+  error,
+  ratingBookFilter,
+  expandedView,
+  collapseView,
   findById,
-  addBook,
   findAndDelete,
-  findAndUpdate,
+  addBook,
+  findAndUpdateBook,
+  setError
 };
 
 
