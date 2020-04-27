@@ -2,6 +2,9 @@
 import store from './store';
 import api from './api';
 
+
+//render and renderError functions, along with conditionals for all states
+
 function render(bookId, expandedView) {
   renderError();
 
@@ -52,3 +55,59 @@ function renderError() {
 }
 
 
+//========== GENERATION TEMPLATE FUNCTIONS==========//  
+
+function generateAddBookmarkView() {
+
+}
+
+
+function generateBook(bookId) {
+
+}
+
+
+function generateFilteredResults(filterBook) {
+
+}
+
+
+function generateExpandedView(bookId, expandedBookView) {
+
+}
+
+
+function generateBookRatings(bookId) {
+
+}
+
+function generateEditView(bookId) {
+
+}
+
+function generateCodeBlock(view) {
+
+}
+
+function generateInitialView() {
+
+}
+
+
+
+//================== EVENT LISTENERS ====================//
+
+// create event listeners here 
+
+function bindEventListeners() {
+
+}
+
+$(bindEventListeners);
+
+
+export default {
+  render,
+  renderError,
+  bindEventListeners
+};
