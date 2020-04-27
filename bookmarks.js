@@ -188,7 +188,7 @@ function generateEditView(bookId) {
       <div class="rescription-container">
         <input type="text" id="new-bookmark-description" class="new-bookmark" name="description" placeholder="Describe website!">
       </div>
-        <button id="cancel-new-bookmark" type="reset">Cancel</button>
+        <button id="cancel-edit" type="reset">Cancel</button>
         <button type="submit" id="add-new-bookmark">Submit</button>
       </form>`;
 }
@@ -275,12 +275,132 @@ function generateInitialView() {
 
 
 
+
 //================== EVENT LISTENERS ====================//
 
-// create event listeners here 
+function handleNewBookmark() {
+  $('main').on('click', '#new-bookmark', event => {
+    store.addingBook = true;
+    render();
+  });
+}
+
+function handleFilterSelect() {
+  $('main').on('change', '.filter-select', event => {
+    store.filterBook = $('.filter-select').val();
+    render();
+  });
+}
+
+function serializeJson(form) {
+  const formData = new FormData(form);
+  const obj = {};
+  formData.forEach((val, name) => obj[name] = val);
+  return JSON.stringify(obj);
+}
+
+function handleCreateBook() {
+  $('main').on('submit', '#new-bookmark-form', event => {
+    event.preventDefault();
+
+    let formElement = document.querySelector("#new-bookmark-form");
+    const myFormData = serializeJson(formElement);
+
+    api.createBookmark(myFormData)
+      .then((newBook) => {
+        store.addBook(newBook);
+        render();
+      });
+    store.addingBook = false;
+  });
+}
+
+function handleDeleteBook() {
+  $('main').on('click', '#delete-bookmark', event => {
+    event.preventDefault();
+
+    const bookId = getBookId(event.currentTarget);
+    api.deleteBookmark(bookId)
+      .then(() => {
+        store.findAndDelete(bookId);
+        render();
+      });
+  });
+}
+
+function handleCancelCreate() {
+  $('main').on('click', '#cancel-new-bookmark', event => {
+    event.preventDefault();
+    store.addingBook = false;
+    render();
+  });
+}
+
+function handleCancelEdit() {
+  $('main').on('click', '#cancel-edit', event => {
+    event.preventDefault();
+
+    store.editBook = false;
+    render();
+  });
+}
+
+function handleClickLink() {
+  $('main').on('click', '.link', event => {
+    event.preventDefault();
+
+    let link = $(event.currentTarget);
+    window.open(link.attr("href"), event.currentTarget);
+  });
+}
+
+function handleSubmitEdit() {
+  $('main').on('submit', '.edit-bookmark-form', event => {
+    event.preventDefault();
+
+    const bookId = $(event.currentTarget).data('book-id');
+    let formElement = document.querySelector(".edit-bookmark-form");
+    const newFormData = serializeJson(formElement);
+
+    api.updateBookmark(bookId, newFormData)
+      .then(() => {
+        store.findAndUpdateBook(bookId, newFormData);
+        render();
+      });
+    store.editBook = false;
+  });
+}
+
+function handleExpandedView() {
+  $('main').on('click', '.bookmark-data', event => {
+    event.preventDefault();
+
+    const bookId = getBookId(event.currentTarget);
+    let book = event.currentTarget;
+    render(bookId, book);
+  });
+}
+
+function getBookId(book) {
+  return $(book)
+    .closest('.bookmark-data')
+    .data('book-id');
+}
+
+
+
+//=============== BIND ALL EVENT LISTENERS=============//
 
 function bindEventListeners() {
-
+  handleNewBookmark();
+  handleFilterSelect();
+  handleCreateBook();
+  handleDeleteBook();
+  handleCancelCreate();
+  handleClickLink();
+  handleSubmitEdit();
+  handleCancelEdit();
+  handleExpandedView();
 }
 
 $(bindEventListeners);
