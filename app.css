@@ -4,9 +4,10 @@
 
 body{
   background:rgba(29, 35, 41, 0.945);
-  margin: .6em;
+  /* margin: .6em; */
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
+
 
 .title-container {
   display: flex;
@@ -14,10 +15,11 @@ body{
   background: rgba(111, 142, 189, 0.925);
   border: solid black .2em;
   width: 100%;
-  max-width: 750px;
   padding: 1rem;
-  margin: 2em auto 1.2em auto;
+  margin: 2em 0 2em 0;
 }
+
+
 
 /*=============== Button styles ================= */
 
@@ -47,7 +49,7 @@ option {
 select {
   font-weight: lighter;
   width: 175px;
-  border-radius: 5%;
+  border-radius: 4%;
   opacity: 95%;
   color: black;
 }
@@ -69,21 +71,26 @@ select {
   margin: auto;
 }
 
-@media (min-width: 300px) {
+
+
+
+/*================= Media Queries============ */
+
+@media (min-width: 320px) {
+
+  div.title-container {
+  text-align: center;
+  margin-top: 4px;
+}
 
   #new-bookmark-form {
     display: flex;
     flex-direction: column;
-    margin: auto;
+   
   }
 
   .bookmark-data {
     margin: 0;
-  }
-
-  .title-container {
-    display: flex;
-    justify-content: center;
   }
 
   h1 {
@@ -93,7 +100,7 @@ select {
 
 }
 
-@media (min-width: 660px) {
+@media (min-width: 720px) {
   .title-container {
   display: flex;
   justify-content: center;
@@ -104,7 +111,6 @@ select {
   padding: 1rem;
   margin: 2em auto 1.2em auto;
 }
-
 
   h1 {
     text-align: center;
@@ -125,6 +131,13 @@ select {
 #new-bookmark-description {
   height: 2.3em;
   width: 353px;
+}
+
+@media (max-width: 1080) {
+  div.title-container {
+    flex: auto;
+}
+
 }
 
 /*================ Saved Bookmarks styles ===============  */
