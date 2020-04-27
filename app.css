@@ -4,7 +4,7 @@
 
 body{
   background:rgba(29, 35, 41, 0.945);
-  padding: 16px;
+  margin: .6em;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
@@ -67,6 +67,49 @@ select {
   width: 400px;
   height: fit-content;
   margin: auto;
+}
+
+@media (min-width: 300px) {
+
+  #new-bookmark-form {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+  }
+
+  .bookmark-data {
+    margin: 0;
+  }
+
+  .title-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  h1 {
+    text-align: center;
+    margin: auto;
+  }
+
+}
+
+@media (min-width: 660px) {
+  .title-container {
+  display: flex;
+  justify-content: center;
+  background: rgba(111, 142, 189, 0.925);
+  border: solid black .2em;
+  width: 100%;
+  max-width: 750px;
+  padding: 1rem;
+  margin: 2em auto 1.2em auto;
+}
+
+
+  h1 {
+    text-align: center;
+    margin: auto;
+  }
 }
 
 .rating-select {
