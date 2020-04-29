@@ -67,10 +67,10 @@ function generateAddBookmarkView() {
     </div>
     <div class="url-and-title">
     <form id="new-bookmark-form" action="#">
-      <label for="name"></label>
+      <label for="new-bookmark-input">Website Address</label>
         <input type="url" id="new-bookmark-input" class="new-bookmark" name="url" placeholder="URL" 
         required>
-      <label for="name"></label>
+      <label for="new-bookmark-title">Website Name</label>
         <input type="text" id="new-bookmark-title" class="new-bookmark" name="title" placeholder="Site Name" required>
         <select name="rating" class="rating-select">
         <option value="1">⭐+</option>
@@ -81,7 +81,7 @@ function generateAddBookmarkView() {
     </div>
         </select>
       <div class="description-container">
-        <input type="textfield" id="new-bookmark-description" class="new-bookmark" name="desc" placeholder="Brief website description (optional)">
+        <input type="text" id="new-bookmark-description" class="new-bookmark" name="desc" placeholder="Brief website description (optional)">
       </div>  
         <button type="submit" id="add-new-bookmark">Add Book</button>
       <button id="cancel-new-bookmark" type="reset">Cancel</button>
@@ -97,7 +97,7 @@ function generateItem() {
       <div class="star-rating">
       <form id="${itemArr[i].id}">
       ${generateRatings(itemArr[i].id)}
-      </form><button id="delete-bookmark-button">Delete</button></div>
+      </form><button class="delete-bookmark-button">Delete</button></div>
       </li>`);
   }
   htmlArr.push('</ul>');
@@ -112,7 +112,7 @@ function generateFilteredResults(filter) {
       ${itemArr[i].title} 
       <div class="star-rating"><form id="${itemArr[i].id}">
       ${generateRatings(itemArr[i].id)}
-    </form><button id="delete-bookmark-button">Delete</button></div>
+    </form><button class="delete-bookmark-button">Delete</button></div>
     </li>`);
   }
   htmlArr.push("</ul>");
@@ -128,7 +128,7 @@ function generateExpandedView(id, expand) {
     return `${item.title} 
       <div class="star-rating"><form id="${item.id}">
       ${generateRatings(id)}
-      </form><button id="delete-bookmark-button">Delete</button></div>`;
+      </form><button class="delete-bookmark-button">Delete</button></div>`;
   }
 
   else {
@@ -142,7 +142,7 @@ function generateExpandedView(id, expand) {
       <div class="description-container">
         ${item.desc}
       <a class="link" href ="${item.url}">Visit Website</a></div>
-      <button id="delete-bookmark-button">Delete</button> <button id="edit-bookmark">Edit</button>
+      <button class="delete-bookmark-button">Delete</button> <button id="edit-bookmark">Edit</button>
       </li>`;
   }
 }
@@ -168,10 +168,10 @@ function generateEditView(id) {
   </div>
   <div class="url-and-title">
     <form class="edit-bookmark-form" data-item-id="${item.id}" action="#">
-      <label for="name"></label>
+      <label for="name">Website Address</label>
         <input type="url" id="new-bookmark-input" class="edit-bookmark" name="url" value="${item.url}" 
         required>
-      <label for="name"></label>
+      <label for="name">Website Name</label>
         <input type="text" id="new-bookmark-title" class="edit-bookmark" name="title" value="${item.title}" required>
       <select name="rating" class="rating-select">
         <option value="1">⭐+</option>
@@ -182,7 +182,7 @@ function generateEditView(id) {
   </div>
       </select>
       <div class="description-container">
-        <input type="textfield" id="new-bookmark-description" class="new-bookmark" name="desc" placeholder="Brief website description (optional)" required>
+        <input type="text" id="new-bookmark-description" class="new-bookmark" name="desc" placeholder="Brief website description (optional)" required>
       </div>  
       <button type="submit" id="edit-bookmark-submit">Make Changes</button>
       <button id="cancel-edit" type="reset">Cancel</button>
@@ -325,7 +325,7 @@ function handleCancelCreate() {
 }
 
 function handleDeleteBook() {
-  $('main').on('click', '#delete-bookmark-button', event => {
+  $('main').on('click', '.delete-bookmark-button', event => {
     event.preventDefault();
 
     const id = getBookId(event.currentTarget);
