@@ -70,6 +70,10 @@ select {
   margin: auto;
 }
 
+.edit-bookmark-form {
+  width: 60%;
+}
+
 label {
   color: rgba(168, 91, 162, 0.938);
 }
@@ -82,7 +86,7 @@ label {
 
   div.title-container {
   text-align: center;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
   #new-bookmark-form {
@@ -206,7 +210,7 @@ input[type=checkbox]:checked {
   border-radius: 5%;
   opacity: 95%;
   color: black;
-  width: 100%;
+  width: 62%;
   height: fit-content;
   margin: auto;
 }

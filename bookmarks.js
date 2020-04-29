@@ -168,10 +168,10 @@ function generateEditView(id) {
   </div>
   <div class="url-and-title">
     <form class="edit-bookmark-form" data-item-id="${item.id}" action="#">
-      <label for="name">Website Address</label>
+      <label for="new-bookmark-input">Website Address</label>
         <input type="url" id="new-bookmark-input" class="edit-bookmark" name="url" value="${item.url}" 
         required>
-      <label for="name">Website Name</label>
+      <label for="new-bookmark-title">Website Name</label>
         <input type="text" id="new-bookmark-title" class="edit-bookmark" name="title" value="${item.title}" required>
       <select name="rating" class="rating-select">
         <option value="1">⭐+</option>
