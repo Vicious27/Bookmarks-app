@@ -4,7 +4,6 @@
 
 body{
   background:rgba(29, 35, 41, 0.945);
-  /* margin: .6em; */
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
@@ -39,7 +38,7 @@ option {
 }
 
 .filter-select {
-  background:rgba(231, 231, 231, 0.911);
+  background:rgba(231, 231, 231, 0.911)
 }
 
 .new-bookmark-button {
@@ -86,6 +85,19 @@ select {
   #new-bookmark-form {
     display: flex;
     flex-direction: column;
+    width: 100%;
+  }
+
+  .edit-bookmark-form {
+    width: 100%
+  }
+
+  .rating-select {
+    width: 100%;
+  }
+
+  .title-button-container{
+      padding: .6em;
   }
 
   .bookmark-data {
@@ -111,17 +123,24 @@ select {
   margin: 2em auto 1.2em auto;
 }
 
+#new-bookmark-form {
+  width: 60%
+}
+
   h1 {
     text-align: center;
     margin: auto;
   }
-}
 
-.rating-select {
-  width: 353px;
+  .rating-select {
+  width: 100%;
   margin: auto;
   height: 2.3em;
+ }
+
 }
+
+
 
 #new-bookmark-input,#new-bookmark-title {
   height: 2.3em;
@@ -129,17 +148,14 @@ select {
 
 #new-bookmark-description {
   height: 2.3em;
-  width: 353px;
-}
-
-@media (max-width: 1080) {
-  div.title-container {
-    flex: auto;
-}
-
+  width: 100%;
 }
 
 /*================ Saved Bookmarks styles ===============  */
+
+.bookmark-list {
+  padding: 0;
+}
 
 .bookmark-data {
   list-style-type: none;
@@ -186,7 +202,7 @@ input[type=checkbox]:checked {
   border-radius: 5%;
   opacity: 95%;
   color: black;
-  width: 400px;
+  width: 100%;
   height: fit-content;
   margin: auto;
 }

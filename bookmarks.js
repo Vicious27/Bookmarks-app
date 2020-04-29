@@ -89,31 +89,33 @@ function generateAddBookmarkView() {
 }
 
 function generateItem() {
-  const htmlArr = [];
+  const htmlArr = ['<ul class="bookmark-list">'];
   let itemArr = store.bookmarks;
   for (let i = 0; i < itemArr.length; i++) {
     htmlArr.push(`<li class="bookmark-data"  data-item-id="${itemArr[i].id}">
       ${itemArr[i].title} 
-      <span class="star-rating">
+      <div class="star-rating">
       <form id="${itemArr[i].id}">
       ${generateRatings(itemArr[i].id)}
-      </form><button id="delete-bookmark">Delete</button></span>
+      </form><button id="delete-bookmark-button">Delete</button></div>
       </li>`);
   }
+  htmlArr.push('</ul>');
   return htmlArr.join(' ');
 }
 
 function generateFilteredResults(filter) {
-  const htmlArr = [];
+  const htmlArr = ['<ul class="bookmark-list">'];
   let itemArr = store.ratingFilter(filter);
   for (let i = 0; i < itemArr.length; i++) {
     htmlArr.push(`<li class="bookmark-data"  data-item-id="${itemArr[i].id}">
       ${itemArr[i].title} 
-      <span class="star-rating"><form id="${itemArr[i].id}">
+      <div class="star-rating"><form id="${itemArr[i].id}">
       ${generateRatings(itemArr[i].id)}
-    </form><button id="delete-bookmark">Delete</button></span>
+    </form><button id="delete-bookmark-button">Delete</button></div>
     </li>`);
   }
+  htmlArr.push("</ul>");
   return htmlArr.join('');
 }
 
@@ -124,9 +126,9 @@ function generateExpandedView(id, expand) {
     store.collapse(id);
     $(expand).find('.expanded-bookmark-data').remove();
     return `${item.title} 
-      <span class="star-rating"><form id="${item.id}">
+      <div class="star-rating"><form id="${item.id}">
       ${generateRatings(id)}
-      </form><button id="delete-bookmark">Delete</button></span>`;
+      </form><button id="delete-bookmark-button">Delete</button></div>`;
   }
 
   else {
@@ -134,13 +136,13 @@ function generateExpandedView(id, expand) {
 
     return `<li class="expanded-bookmark-data"  data-item-id="${item.id}">
       ${item.title}   
-      <span class="star-rating"><form id="${item.id}">
+      <div class="star-rating"><form id="${item.id}">
       ${generateRatings(id)}
-      </form></span>  
+      </form></div>  
       <div class="description-container">
         ${item.desc}
       <a class="link" href ="${item.url}">Visit Website</a></div>
-      <button id="delete-bookmark">Delete</button> <button id="edit-bookmark">Edit</button>
+      <button id="delete-bookmark-button">Delete</button> <button id="edit-bookmark">Edit</button>
       </li>`;
   }
 }
@@ -182,7 +184,7 @@ function generateEditView(id) {
       <div class="description-container">
         <input type="textfield" id="new-bookmark-description" class="new-bookmark" name="desc" placeholder="Brief website description (optional)" required>
       </div>  
-      <button type="submit" id="edit-bookmark-submit">Make Changess</button>
+      <button type="submit" id="edit-bookmark-submit">Make Changes</button>
       <button id="cancel-edit" type="reset">Cancel</button>
     </form>`;
 }
@@ -323,7 +325,7 @@ function handleCancelCreate() {
 }
 
 function handleDeleteBook() {
-  $('main').on('click', '#delete-bookmark', event => {
+  $('main').on('click', '#delete-bookmark-button', event => {
     event.preventDefault();
 
     const id = getBookId(event.currentTarget);
